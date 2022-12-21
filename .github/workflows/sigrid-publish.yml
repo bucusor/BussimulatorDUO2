@@ -1,9 +1,8 @@
-
-name: Publish to Sigrid
+name: sigrid-publish
 on:
   push:
     branches:
-      - main
+      - "main"
 
 jobs:
   sigridci:
@@ -11,11 +10,9 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
-      - name: Sigrid CI
-        uses: Software-Improvement-Group/sigridci@main
-        with:
-          customer: examplecustomername
-          system: examplesystemname
-          publishonly: true
+      - name: Download Sigrid CI
+        run: "git clone https://github.com/Software-Improvement-Group/sigridci.git sigridci"
+      - name: "Run Sigrid CI" 
         env:
-         run: "./sigridci/sigridci/sigridci.py --customer scmi --system 382428-bussimulator --source . --publish"
+          SIGRID_CI_TOKEN: "${{ secrets.SIGRID_CI_TOKEN }}"
+        run: "./sigridci/sigridci/sigridci.py --customer scmi --system 382428-bussimulator --source . --publish"
