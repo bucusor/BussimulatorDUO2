@@ -10,21 +10,25 @@ public class Berichten {
 	private int hashValue;
 	private boolean refresh;
 	private String[] infoTekstRegels;
-	
+
+	int totaalTijden;
+	int aantalRegels;
+	int[] aankomsttijden;
+
 	public void nieuwBericht(String incoming) {
 		try {
 			JSONBericht bericht = new ObjectMapper().readValue(incoming, JSONBericht.class);
-	    	String busID = bericht.getBusID();
-	    	Integer tijd = bericht.getTijd();
-	    	if (!laatsteBericht.containsKey(busID) || laatsteBericht.get(busID)<=tijd){
-	    		laatsteBericht.put(busID, tijd);
-	    		if (bericht.getAankomsttijd()==0){
-	    			infoBordRegels.remove(busID);
-	    		} else {
-	    			infoBordRegels.put(busID, bericht);
-	    		}
-	    	}
-	    	setRegels();
+			String busID = bericht.getBusID();
+			Integer tijd = bericht.getTijd();
+			if (!laatsteBericht.containsKey(busID) || laatsteBericht.get(busID)<=tijd){
+				laatsteBericht.put(busID, tijd);
+				if (bericht.getAankomsttijd()==0){
+					infoBordRegels.remove(busID);
+				} else {
+					infoBordRegels.put(busID, bericht);
+				}
+			}
+			setRegels();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -73,11 +77,11 @@ public class Berichten {
 		}
 		return false;
 	}
-	
+
 	public boolean hetBordMoetVerverst() {
 		return refresh;
 	}
-	
+
 	public String[] repaintInfoBordValues(){
 		return infoTekstRegels;
 	}

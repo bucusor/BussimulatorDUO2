@@ -21,18 +21,18 @@ public class Infobord extends Application{
 	private String halte;
 	private String richting;
 	private Berichten berichten;
-	
+
 	public Infobord(String halte, String richting) {
 		this.titel = "Bushalte " + halte + " in richting " + richting;
 		this.halte=halte;
 		this.richting=richting;
 		this.berichten=new Berichten();
 	}
-	
+
 	public void verwerkBericht() {
 		if (berichten.hetBordMoetVerverst()) {
 			String[] infoTekstRegels = berichten.repaintInfoBordValues();
-			//Deze code hoort bij opdracht 3
+//			Deze code hoort bij opdracht 3
 			InfobordTijdFuncties tijdfuncties = new InfobordTijdFuncties();
 			String tijd = tijdfuncties.getCentralTime().toString();
 			tijdRegel.setText(tijd);
@@ -47,31 +47,18 @@ public class Infobord extends Application{
 		Runnable updater = new Runnable() {
 			@Override
 			public void run() {
-				verwerkBericht();	
+				verwerkBericht();
 			}
 		};
 		Platform.runLater(updater);
 	}
 
-	@Override
-	public void start(Stage primaryStage) {
-		String selector = "(HALTE = '"+ halte + "') AND (RICHTING='"+ richting + "')";
-		thread(new ListenerStarter(selector, this, berichten),false);
+	public GridPane setUpPane(){
 		GridPane pane = new GridPane();
 		pane.setAlignment(Pos.CENTER_LEFT);
 		pane.setPadding(new Insets(11.5, 12.5, 13.5, 14.5));
 		pane.setHgap(5.5);
 		pane.setVgap(5.5);
-		// Place nodes in the pane
-		pane = addToPane(pane);
-		// Create a scene and place it in the stage
-		Scene scene = new Scene(pane,500,150);
-		primaryStage.setTitle(titel); // Set the stage title
-		primaryStage.setScene(scene); // Place the scene in the stage
-		primaryStage.show(); // Display the stage
-	}
-
-	private GridPane addToPane(GridPane pane){
 		pane.add(new Label("Voor het laatst bijgewerkt op :"), 0, 0);
 		pane.add(tijdRegel, 1, 0);
 		pane.add(new Label("1:"), 0, 1);
@@ -82,8 +69,21 @@ public class Infobord extends Application{
 		pane.add(infoRegel3, 1, 3);
 		pane.add(new Label("4:"), 0, 4);
 		pane.add(infoRegel4, 1, 4);
-
 		return pane;
+	}
+
+	@Override
+	public void start(Stage primaryStage) {
+//		TODO maak de selector aan
+//		String selector = "busID IN " + "('" + halte + "')"  ;
+		String selector = "JMSCorrelationID='" + halte + richting +  	"'";
+		thread(new ListenerStarter(selector, this, berichten),false);
+		GridPane pane = setUpPane();
+		// Create a scene and place it in the stage
+		Scene scene = new Scene(pane,500,150);
+		primaryStage.setTitle(titel); // Set the stage title
+		primaryStage.setScene(scene); // Place the scene in the stage
+		primaryStage.show(); // Display the stage
 	}
 
 	public void thread(Runnable runnable, boolean daemon) {
