@@ -10,19 +10,6 @@ public class JSONBericht {
 	private String bedrijf;
 	private String eindpunt;
 
-	public JSONBericht(int tijd, int aankomsttijd, String lijnNaam, String busID, String bedrijf, String eindpunt) {
-		super();
-		this.tijd = tijd;
-		this.aankomsttijd = aankomsttijd;
-		this.lijnNaam = lijnNaam;
-		this.busID = busID;
-		this.bedrijf = bedrijf;
-		this.eindpunt = eindpunt;
-	}
-
-	public JSONBericht(){
-
-	}
 
 	public int getTijd() {
 		return tijd;
@@ -76,7 +63,7 @@ public class JSONBericht {
 //		Code voor opdracht 3:
 		InfobordTijdFuncties tijdFuncties = new InfobordTijdFuncties();
 		String tijd = tijdFuncties.getFormattedTimeFromCounter(aankomsttijd);
-		//String tijd = "" + aankomsttijd;
+//		String tijd = "" + aankomsttijd;
 		String regel = String.format("%8s - %5s - %12s", this.lijnNaam, this.eindpunt, tijd);
 		return regel;
 	}
