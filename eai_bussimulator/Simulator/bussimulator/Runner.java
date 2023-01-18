@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import tijdtools.TijdFuncties;
+import dashboard.TijdFuncties;
 
 public class Runner implements Runnable {
 
@@ -40,7 +40,7 @@ public class Runner implements Runnable {
 				bus.sendLastETA(nu);
 				itr.remove();
 			}
-		}		
+		}
 	}
 
 	public static void sendETAs(int nu){
@@ -48,7 +48,7 @@ public class Runner implements Runnable {
 		while (itr.hasNext()) {
 			Bus bus = itr.next();
 			bus.sendETAs(nu);
-		}				
+		}
 	}
 
 	public static int initBussen(){
@@ -75,7 +75,7 @@ public class Runner implements Runnable {
 		addBus(13, new Bus(Lijnen.LIJN5, Bedrijven.FLIXBUS, direction));
 	}
 
-//	@Override
+	//	@Override
 //	public void run() {
 //		int tijd=0;
 //		int volgende = initBussen();
