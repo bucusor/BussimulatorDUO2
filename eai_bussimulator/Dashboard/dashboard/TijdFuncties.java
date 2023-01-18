@@ -4,11 +4,12 @@ import java.io.IOException;
 import com.thoughtworks.xstream.XStream;
 import tijdtools.HTTPFuncties;
 import tijdtools.Tijd;
+import tijdtools.Time;
 
 public class TijdFuncties {
-	private Tijd startTijd;
-	private Tijd simulatorTijd;
-	private Tijd verschil;
+	private Time startTijd;
+	private Time simulatorTijd;
+	private Time verschil;
 	private int interval;
 	private int syncInterval;
 	private int syncCounter;
@@ -23,7 +24,7 @@ public class TijdFuncties {
 	}
 
 	public String getSimulatorWeergaveTijd(){
-		Tijd simulatorWeergaveTijd= simulatorTijd.copyTijd();
+		Time simulatorWeergaveTijd= simulatorTijd.copyTijd();
 		simulatorWeergaveTijd.increment(verschil);
 		return simulatorWeergaveTijd.toString();
 	}
@@ -46,11 +47,11 @@ public class TijdFuncties {
 		}
 	}
 
-	private int calculateCounter(Tijd tijd){
+	private int calculateCounter(Time tijd){
 		return tijd.getUur()*3600+tijd.getMinuut()*60+tijd.getSeconde();
 	}
 
-	private Tijd berekenVerschil(Tijd reverentieTijd, Tijd werkTijd){
+	private Time berekenVerschil(Time reverentieTijd, Time werkTijd){
 		int urenVerschil = reverentieTijd.getUur()-werkTijd.getUur();
 		int minutenVerschil = reverentieTijd.getMinuut()-werkTijd.getMinuut();
 		int secondenVerschil = reverentieTijd.getSeconde()-werkTijd.getSeconde();
@@ -66,22 +67,22 @@ public class TijdFuncties {
 	}
 
 	private void synchroniseTijd(){
-		Tijd huidigeTijd = getCentralTime();
+		Time huidigeTijd = getCentralTime();
 		System.out.println("De werkelijke tijd is nu: "+ huidigeTijd.toString());
-		Tijd verwachtteSimulatorTijd = simulatorTijd.copyTijd();
+		Time verwachtteSimulatorTijd = simulatorTijd.copyTijd();
 		verwachtteSimulatorTijd.increment(verschil);
-		Tijd delay = berekenVerschil(huidigeTijd, verwachtteSimulatorTijd);
+		Time delay = berekenVerschil(huidigeTijd, verwachtteSimulatorTijd);
 		verschil.increment(delay);
 	}
 
-	private Tijd getCentralTime()
+	private Time getCentralTime()
 	{
 		try {
 			HTTPFuncties httpFuncties = new HTTPFuncties();
 			String result = httpFuncties.executeGet("xml");
 			XStream xstream = new XStream();
 			xstream.alias("Tijd", Tijd.class);
-			Tijd tijd=(Tijd)xstream.fromXML(result);
+			Time tijd=(Tijd)xstream.fromXML(result);
 			return tijd;
 
 		} catch (IOException e) {
