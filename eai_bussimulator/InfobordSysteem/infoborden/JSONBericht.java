@@ -1,5 +1,6 @@
 package infoborden;
 
+import tijdtools.InfobordTijdFuncties;
 import tijdtools.Tijd;
 
 public class JSONBericht {
@@ -78,8 +79,7 @@ public class JSONBericht {
 		int uur = counter/3600;
 		int minuten = (counter-3600*uur)/60;
 		int seconden = counter - 3600*uur - 60*minuten;
-		Tijd tijd=new Tijd(uur,minuten,seconden);
-		return tijd.toString();
+		return String.format("%02d:%02d:%02d", uur,minuten,seconden);
 	}
 
 }

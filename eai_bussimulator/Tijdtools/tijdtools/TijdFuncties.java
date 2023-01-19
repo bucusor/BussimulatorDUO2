@@ -81,8 +81,7 @@ public class TijdFuncties {
 		try {
 			HTTPFuncties httpFuncties = new HTTPFuncties();
 			String result = httpFuncties.executeGet("json");
-			Tijd tijd = new ObjectMapper().readValue(result, Tijd.class);
-			return tijd;
+			return new ObjectMapper().readValue(result, Tijd.class);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return new Tijd(0,0,0);

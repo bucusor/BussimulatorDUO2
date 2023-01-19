@@ -9,7 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import tijdtools.TijdFuncties;
+import tijdtools.InfobordTijdFuncties;
 
 public class Infobord extends Application{
 	private String titel = "Bushalte XX in richting YY";
@@ -33,7 +33,7 @@ public class Infobord extends Application{
 		if (berichten.hetBordMoetVerverst()) {
 			String[] infoTekstRegels = berichten.repaintInfoBordValues();
 //			Deze code hoort bij opdracht 3
-			String tijd = TijdFuncties.getCentralTime().toString();
+			String tijd = InfobordTijdFuncties.getCentralTime().toString();
 			tijdRegel.setText(tijd);
 			infoRegel1.setText(infoTekstRegels[0]);
 			infoRegel2.setText(infoTekstRegels[1]);
