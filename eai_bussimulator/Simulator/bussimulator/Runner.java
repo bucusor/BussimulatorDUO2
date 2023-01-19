@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import dashboard.TijdFuncties;
+import tijdtools.TijdFuncties;
 
 public class Runner implements Runnable {
 
@@ -12,6 +12,7 @@ public class Runner implements Runnable {
 	private static ArrayList<Bus> actieveBussen = new ArrayList<Bus>();
 	private static int interval=1000;
 	private static int syncInterval=5;
+	static BusFactory busFactory;
 
 	private static void addBus(int starttijd, Bus bus){
 		ArrayList<Bus> bussen = new ArrayList<Bus>();
@@ -52,27 +53,28 @@ public class Runner implements Runnable {
 	}
 
 	public static int initBussen(){
+		busFactory = new BusFactory();
 		createBus(1);
 		createBus(-1);
 		return Collections.min(busStart.keySet());
 	}
 
 	public static void createBus(int direction){
-		addBus(3, new Bus(Lijnen.LIJN1, Bedrijven.ARRIVA, direction));
-		addBus(5, new Bus(Lijnen.LIJN2, Bedrijven.ARRIVA, direction));
-		addBus(4, new Bus(Lijnen.LIJN3, Bedrijven.ARRIVA, direction));
-		addBus(6, new Bus(Lijnen.LIJN4, Bedrijven.ARRIVA, direction));
-		addBus(3, new Bus(Lijnen.LIJN5, Bedrijven.FLIXBUS, direction));
-		addBus(5, new Bus(Lijnen.LIJN6, Bedrijven.QBUZZ, direction));
-		addBus(4, new Bus(Lijnen.LIJN7, Bedrijven.QBUZZ, direction));
-		addBus(6, new Bus(Lijnen.LIJN1, Bedrijven.ARRIVA, direction));
-		addBus(12, new Bus(Lijnen.LIJN4, Bedrijven.ARRIVA, direction));
-		addBus(10, new Bus(Lijnen.LIJN5, Bedrijven.FLIXBUS, direction));
-		addBus(3, new Bus(Lijnen.LIJN8, Bedrijven.QBUZZ, direction));
-		addBus(5, new Bus(Lijnen.LIJN8, Bedrijven.QBUZZ, direction));
-		addBus(14, new Bus(Lijnen.LIJN3, Bedrijven.ARRIVA, direction));
-		addBus(16, new Bus(Lijnen.LIJN4, Bedrijven.ARRIVA, direction));
-		addBus(13, new Bus(Lijnen.LIJN5, Bedrijven.FLIXBUS, direction));
+		addBus(3, busFactory.createBus(Lijnen.LIJN1, Bedrijven.ARRIVA, direction));
+		addBus(5, busFactory.createBus(Lijnen.LIJN2, Bedrijven.ARRIVA, direction));
+		addBus(4, busFactory.createBus(Lijnen.LIJN3, Bedrijven.ARRIVA, direction));
+		addBus(6, busFactory.createBus(Lijnen.LIJN4, Bedrijven.ARRIVA, direction));
+		addBus(3, busFactory.createBus(Lijnen.LIJN5, Bedrijven.FLIXBUS, direction));
+		addBus(5, busFactory.createBus(Lijnen.LIJN6, Bedrijven.QBUZZ, direction));
+		addBus(4, busFactory.createBus(Lijnen.LIJN7, Bedrijven.QBUZZ, direction));
+		addBus(6, busFactory.createBus(Lijnen.LIJN1, Bedrijven.ARRIVA, direction));
+		addBus(12, busFactory.createBus(Lijnen.LIJN4, Bedrijven.ARRIVA, direction));
+		addBus(10, busFactory.createBus(Lijnen.LIJN5, Bedrijven.FLIXBUS, direction));
+		addBus(3, busFactory.createBus(Lijnen.LIJN8, Bedrijven.QBUZZ, direction));
+		addBus(5, busFactory.createBus(Lijnen.LIJN8, Bedrijven.QBUZZ, direction));
+		addBus(14, busFactory.createBus(Lijnen.LIJN3, Bedrijven.ARRIVA, direction));
+		addBus(16, busFactory.createBus(Lijnen.LIJN4, Bedrijven.ARRIVA, direction));
+		addBus(13, busFactory.createBus(Lijnen.LIJN5, Bedrijven.FLIXBUS, direction));
 	}
 
 	//	@Override

@@ -15,7 +15,7 @@ public class Bus{
 	private String busName;
 	Halte halte;
 
-
+	
 	Bus(Route lijn, Bedrijven bedrijf, int richting){
 		this.lijn=lijn;
 		this.bedrijf=bedrijf;
@@ -26,16 +26,16 @@ public class Bus{
 		this.busID = "Niet gestart";
 		this.busName = lijn.getName();
 	}
-
+	
 	public void setbusID(int starttijd){
 		this.busID=starttijd+busName+richting;
 	}
-
+	
 	public void naarVolgendeHalte(){
 		Positie volgendeHalte = lijn.getHalte(halteNummer+richting).getPositie();
 		totVolgendeHalte = halte.afstand(volgendeHalte);
 	}
-
+	
 	public boolean halteBereikt(){
 		halteNummer+=richting;
 		bijHalte=true;
@@ -48,10 +48,10 @@ public class Bus{
 			System.out.printf("Bus %s heeft halte %s, richting %d bereikt.%n",
 					busName, halte, lijn.getRichting(halteNummer)*richting);
 			naarVolgendeHalte();
-		}
+		}		
 		return false;
 	}
-
+	
 	public void start() {
 		halteNummer = (richting==1) ? 0 : lijn.getLengte()-1;
 		halte = lijn.getHalte(halteNummer);
@@ -59,7 +59,7 @@ public class Bus{
 				busName, lijn.getHalte(halteNummer), lijn.getRichting(halteNummer)*richting);
 		naarVolgendeHalte();
 	}
-
+	
 	public boolean move(){
 		boolean eindpuntBereikt = false;
 		bijHalte=false;
@@ -74,7 +74,7 @@ public class Bus{
 		}
 		return eindpuntBereikt;
 	}
-
+	
 	public void sendETAs(int nu){
 		int i=0;
 		Bericht bericht = new Bericht(busName,bedrijf.name(),busID,nu);
@@ -93,7 +93,7 @@ public class Bus{
 		bericht.eindpunt=lijn.getHalte(i-richting).name();
 		sendBericht(bericht);
 	}
-
+	
 	public void sendLastETA(int nu){
 		Bericht bericht = new Bericht(busName,bedrijf.name(),busID,nu);
 		String eindpunt = halte.name();
@@ -104,11 +104,13 @@ public class Bus{
 	}
 
 	public void sendBericht(Bericht bericht){
-		XStream xstream = new XStream();
-		xstream.alias("Bericht", Bericht.class);
-		xstream.alias("ETA", ETA.class);
+    	XStream xstream = new XStream();
+	   	xstream.alias("Bericht", Bericht.class);
+    	xstream.alias("ETA", ETA.class);
 		String xml = xstream.toXML(bericht);
-		Producer producer = new Producer();
-		producer.sendBericht(xml);
+    	Producer producer = new Producer();
+    	producer.sendBericht(xml);
 	}
+
+
 }

@@ -1,7 +1,7 @@
 package bussimulator;
 
 public enum Lijnen implements Route {
-
+	
 	LIJN1 (new Stop(Halte.A,1),new Stop(Halte.B,1),new Stop(Halte.C,1),
 			new Stop(Halte.D,1),new Stop(Halte.E,1),new Stop(Halte.F,1),new Stop(Halte.G,1)),
 	LIJN2 (new Stop(Halte.H,1),new Stop(Halte.E,1),new Stop(Halte.I,1),
@@ -19,9 +19,9 @@ public enum Lijnen implements Route {
 			new Stop(Halte.G,-1),new Stop(Halte.Y,-1),new Stop(Halte.X,-1),new Stop(Halte.W,-1)),
 	LIJN8 (new Stop(Halte.M,-1),new Stop(Halte.P,1),new Stop(Halte.J,1),new Stop(Halte.F,-1),
 			new Stop(Halte.V,-1),new Stop(Halte.E,-1),new Stop(Halte.H,-1));
-
+	
 	private final Stop[] haltes;
-
+	
 	Lijnen(Stop...haltes){
 		this.haltes=haltes;
 	}
@@ -46,7 +46,7 @@ public enum Lijnen implements Route {
 	static class Stop{
 		Halte halte;
 		int richting;
-
+		
 		public Stop(Halte halte, int richting){
 			this.halte=halte;
 			this.richting=richting;
