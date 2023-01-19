@@ -1,13 +1,10 @@
 package tijdtools;
 
 import java.io.IOException;
-import com.thoughtworks.xstream.XStream;
-import org.codehaus.jackson.map.ObjectMapper;
-import tijdtools.HTTPFuncties;
-import tijdtools.Tijd;
-import tijdtools.Time;
 
-public class TijdFuncties {
+import org.codehaus.jackson.map.ObjectMapper;
+
+public class TijdFuncties implements ITijdFuncties {
 	private Time startTijd;
 	private Time simulatorTijd;
 	private Time verschil;
@@ -17,7 +14,7 @@ public class TijdFuncties {
 
 	public void initSimulatorTijden(int interval, int syncInterval){
 		simulatorTijd=new Tijd(0,0,0);
-		startTijd= getCentralTime();
+		startTijd= ITijdFuncties.getCentralTime();
 		verschil=berekenVerschil(startTijd,simulatorTijd);
 		this.interval=interval;
 		this.syncCounter=syncInterval;
@@ -48,11 +45,11 @@ public class TijdFuncties {
 		}
 	}
 
-	private int calculateCounter(Time tijd){
+	public int calculateCounter(Time tijd){
 		return tijd.getUur()*3600+tijd.getMinuut()*60+tijd.getSeconde();
 	}
 
-	private Time berekenVerschil(Time reverentieTijd, Time werkTijd){
+	public Time berekenVerschil(Time reverentieTijd, Time werkTijd){
 		int urenVerschil = reverentieTijd.getUur()-werkTijd.getUur();
 		int minutenVerschil = reverentieTijd.getMinuut()-werkTijd.getMinuut();
 		int secondenVerschil = reverentieTijd.getSeconde()-werkTijd.getSeconde();
@@ -67,8 +64,8 @@ public class TijdFuncties {
 		return new Tijd(urenVerschil, minutenVerschil, secondenVerschil);
 	}
 
-	private void synchroniseTijd(){
-		Time huidigeTijd = getCentralTime();
+	public void synchroniseTijd(){
+		Time huidigeTijd = ITijdFuncties.getCentralTime();
 		System.out.println("De werkelijke tijd is nu: "+ huidigeTijd.toString());
 		Time verwachtteSimulatorTijd = simulatorTijd.copyTijd();
 		verwachtteSimulatorTijd.increment(verschil);
@@ -76,17 +73,6 @@ public class TijdFuncties {
 		verschil.increment(delay);
 	}
 
-	public static Tijd getCentralTime()
-	{
-		try {
-			HTTPFuncties httpFuncties = new HTTPFuncties();
-			String result = httpFuncties.executeGet("json");
-			return new ObjectMapper().readValue(result, Tijd.class);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return new Tijd(0,0,0);
-		}
-	}
 
 
 }
