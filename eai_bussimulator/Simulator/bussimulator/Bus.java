@@ -6,14 +6,14 @@ import bussimulator.Halte.Positie;
 public class Bus{
 
 	private Bedrijven bedrijf;
-	private Lijnen lijn;
+	private Route lijn;
 	private int halteNummer;
 	private int totVolgendeHalte;
 	private int richting;
 	private boolean bijHalte;
 	private String busID;
-	
-	Bus(Lijnen lijn, Bedrijven bedrijf, int richting){
+
+	Bus(Route lijn, Bedrijven bedrijf, int richting){
 		this.lijn=lijn;
 		this.bedrijf=bedrijf;
 		this.richting=richting;
@@ -22,39 +22,39 @@ public class Bus{
 		this.bijHalte = false;
 		this.busID = "Niet gestart";
 	}
-	
+
 	public void setbusID(int starttijd){
-		this.busID=starttijd+lijn.name()+richting;
+		this.busID=starttijd+lijn.getName()+richting;
 	}
-	
+
 	public void naarVolgendeHalte(){
 		Positie volgendeHalte = lijn.getHalte(halteNummer+richting).getPositie();
 		totVolgendeHalte = lijn.getHalte(halteNummer).afstand(volgendeHalte);
 	}
-	
+
 	public boolean halteBereikt(){
 		halteNummer+=richting;
 		bijHalte=true;
 		if ((halteNummer>=lijn.getLengte()-1) || (halteNummer == 0)) {
-			System.out.printf("Bus %s heeft eindpunt (halte %s, richting %d) bereikt.%n", 
-					lijn.name(), lijn.getHalte(halteNummer), lijn.getRichting(halteNummer)*richting);
+			System.out.printf("Bus %s heeft eindpunt (halte %s, richting %d) bereikt.%n",
+					lijn.getName(), lijn.getHalte(halteNummer), lijn.getRichting(halteNummer)*richting);
 			return true;
 		}
 		else {
-			System.out.printf("Bus %s heeft halte %s, richting %d bereikt.%n", 
-					lijn.name(), lijn.getHalte(halteNummer), lijn.getRichting(halteNummer)*richting);		
+			System.out.printf("Bus %s heeft halte %s, richting %d bereikt.%n",
+					lijn.getName(), lijn.getHalte(halteNummer), lijn.getRichting(halteNummer)*richting);
 			naarVolgendeHalte();
-		}		
+		}
 		return false;
 	}
-	
+
 	public void start() {
 		halteNummer = (richting==1) ? 0 : lijn.getLengte()-1;
-		System.out.printf("Bus %s is vertrokken van halte %s in richting %d.%n", 
-				lijn.name(), lijn.getHalte(halteNummer), lijn.getRichting(halteNummer)*richting);		
+		System.out.printf("Bus %s is vertrokken van halte %s in richting %d.%n",
+				lijn.getName(), lijn.getHalte(halteNummer), lijn.getRichting(halteNummer)*richting);
 		naarVolgendeHalte();
 	}
-	
+
 	public boolean move(){
 		boolean eindpuntBereikt = false;
 		bijHalte=false;
@@ -69,10 +69,10 @@ public class Bus{
 		}
 		return eindpuntBereikt;
 	}
-	
+
 	public void sendETAs(int nu){
 		int i=0;
-		Bericht bericht = new Bericht(lijn.name(),bedrijf.name(),busID,nu);
+		Bericht bericht = new Bericht(lijn.getName(),bedrijf.name(),busID,nu);
 		if (bijHalte) {
 			ETA eta = new ETA(lijn.getHalte(halteNummer).name(),lijn.getRichting(halteNummer)*richting,0);
 			bericht.ETAs.add(eta);
@@ -89,9 +89,9 @@ public class Bus{
 		bericht.eindpunt=lijn.getHalte(i-richting).name();
 		sendBericht(bericht);
 	}
-	
+
 	public void sendLastETA(int nu){
-		Bericht bericht = new Bericht(lijn.name(),bedrijf.name(),busID,nu);
+		Bericht bericht = new Bericht(lijn.getName(),bedrijf.name(),busID,nu);
 		String eindpunt = lijn.getHalte(halteNummer).name();
 		ETA eta = new ETA(eindpunt,lijn.getRichting(halteNummer)*richting,0);
 		bericht.ETAs.add(eta);
@@ -102,14 +102,14 @@ public class Bus{
 	public void sendBericht(Bericht bericht){
 		//TODO gebruik XStream om het binnengekomen bericht om te zetten 
 		//     naar een XML bestand (String)
-    	XStream xstream = new XStream();
-    	//TODO zorg er voor dat de XML-tags niet het volledige pad van de 
-    	//     omgezettte klassen bevat
-	   	xstream.alias("Bericht", Bericht.class);
-    	xstream.alias("ETA", ETA.class);
-    	//TODO maak de XML String aan en verstuur het bericht
+		XStream xstream = new XStream();
+		//TODO zorg er voor dat de XML-tags niet het volledige pad van de
+		//     omgezettte klassen bevat
+		xstream.alias("Bericht", Bericht.class);
+		xstream.alias("ETA", ETA.class);
+		//TODO maak de XML String aan en verstuur het bericht
 		String xml = xstream.toXML(bericht);
-    	Producer producer = new Producer();
-    	producer.sendBericht(xml);
+		Producer producer = new Producer();
+		producer.sendBericht(xml);
 	}
 }
