@@ -12,6 +12,7 @@ public class Bus{
 	private int richting;
 	private boolean bijHalte;
 	private String busID;
+	private String busName;
 
 	Bus(Route lijn, Bedrijven bedrijf, int richting){
 		this.lijn=lijn;
@@ -21,10 +22,11 @@ public class Bus{
 		this.totVolgendeHalte = 0;
 		this.bijHalte = false;
 		this.busID = "Niet gestart";
+		this.busName = lijn.getName();
 	}
 
 	public void setbusID(int starttijd){
-		this.busID=starttijd+lijn.getName()+richting;
+		this.busID=starttijd+busName+richting;
 	}
 
 	public void naarVolgendeHalte(){
@@ -37,12 +39,12 @@ public class Bus{
 		bijHalte=true;
 		if ((halteNummer>=lijn.getLengte()-1) || (halteNummer == 0)) {
 			System.out.printf("Bus %s heeft eindpunt (halte %s, richting %d) bereikt.%n",
-					lijn.getName(), lijn.getHalte(halteNummer), lijn.getRichting(halteNummer)*richting);
+					busName, lijn.getHalte(halteNummer), lijn.getRichting(halteNummer)*richting);
 			return true;
 		}
 		else {
 			System.out.printf("Bus %s heeft halte %s, richting %d bereikt.%n",
-					lijn.getName(), lijn.getHalte(halteNummer), lijn.getRichting(halteNummer)*richting);
+					busName, lijn.getHalte(halteNummer), lijn.getRichting(halteNummer)*richting);
 			naarVolgendeHalte();
 		}
 		return false;
@@ -51,7 +53,7 @@ public class Bus{
 	public void start() {
 		halteNummer = (richting==1) ? 0 : lijn.getLengte()-1;
 		System.out.printf("Bus %s is vertrokken van halte %s in richting %d.%n",
-				lijn.getName(), lijn.getHalte(halteNummer), lijn.getRichting(halteNummer)*richting);
+				busName, lijn.getHalte(halteNummer), lijn.getRichting(halteNummer)*richting);
 		naarVolgendeHalte();
 	}
 
@@ -72,7 +74,7 @@ public class Bus{
 
 	public void sendETAs(int nu){
 		int i=0;
-		Bericht bericht = new Bericht(lijn.getName(),bedrijf.name(),busID,nu);
+		Bericht bericht = new Bericht(busName,bedrijf.name(),busID,nu);
 		if (bijHalte) {
 			ETA eta = new ETA(lijn.getHalte(halteNummer).name(),lijn.getRichting(halteNummer)*richting,0);
 			bericht.ETAs.add(eta);
@@ -82,7 +84,6 @@ public class Bus{
 		for (i = halteNummer+richting ; !(i>=lijn.getLengte()) && !(i < 0); i=i+richting ){
 			tijdNaarHalte+= lijn.getHalte(i).afstand(eerstVolgende);
 			ETA eta = new ETA(lijn.getHalte(i).name(), lijn.getRichting(i)*richting,tijdNaarHalte);
-//			System.out.println(bericht.lijnNaam + " naar halte" + eta.halteNaam + " t=" + tijdNaarHalte);
 			bericht.ETAs.add(eta);
 			eerstVolgende=lijn.getHalte(i).getPositie();
 		}
@@ -91,7 +92,7 @@ public class Bus{
 	}
 
 	public void sendLastETA(int nu){
-		Bericht bericht = new Bericht(lijn.getName(),bedrijf.name(),busID,nu);
+		Bericht bericht = new Bericht(busName,bedrijf.name(),busID,nu);
 		String eindpunt = lijn.getHalte(halteNummer).name();
 		ETA eta = new ETA(eindpunt,lijn.getRichting(halteNummer)*richting,0);
 		bericht.ETAs.add(eta);
@@ -100,14 +101,9 @@ public class Bus{
 	}
 
 	public void sendBericht(Bericht bericht){
-		//TODO gebruik XStream om het binnengekomen bericht om te zetten 
-		//     naar een XML bestand (String)
 		XStream xstream = new XStream();
-		//TODO zorg er voor dat de XML-tags niet het volledige pad van de
-		//     omgezettte klassen bevat
 		xstream.alias("Bericht", Bericht.class);
 		xstream.alias("ETA", ETA.class);
-		//TODO maak de XML String aan en verstuur het bericht
 		String xml = xstream.toXML(bericht);
 		Producer producer = new Producer();
 		producer.sendBericht(xml);
