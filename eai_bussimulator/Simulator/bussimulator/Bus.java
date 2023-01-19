@@ -13,6 +13,8 @@ public class Bus{
 	private boolean bijHalte;
 	private String busID;
 	private String busName;
+	Halte halte;
+
 
 	Bus(Route lijn, Bedrijven bedrijf, int richting){
 		this.lijn=lijn;
@@ -31,7 +33,7 @@ public class Bus{
 
 	public void naarVolgendeHalte(){
 		Positie volgendeHalte = lijn.getHalte(halteNummer+richting).getPositie();
-		totVolgendeHalte = lijn.getHalte(halteNummer).afstand(volgendeHalte);
+		totVolgendeHalte = halte.afstand(volgendeHalte);
 	}
 
 	public boolean halteBereikt(){
@@ -39,12 +41,12 @@ public class Bus{
 		bijHalte=true;
 		if ((halteNummer>=lijn.getLengte()-1) || (halteNummer == 0)) {
 			System.out.printf("Bus %s heeft eindpunt (halte %s, richting %d) bereikt.%n",
-					busName, lijn.getHalte(halteNummer), lijn.getRichting(halteNummer)*richting);
+					busName, halte, lijn.getRichting(halteNummer)*richting);
 			return true;
 		}
 		else {
 			System.out.printf("Bus %s heeft halte %s, richting %d bereikt.%n",
-					busName, lijn.getHalte(halteNummer), lijn.getRichting(halteNummer)*richting);
+					busName, halte, lijn.getRichting(halteNummer)*richting);
 			naarVolgendeHalte();
 		}
 		return false;
@@ -52,6 +54,7 @@ public class Bus{
 
 	public void start() {
 		halteNummer = (richting==1) ? 0 : lijn.getLengte()-1;
+		halte = lijn.getHalte(halteNummer);
 		System.out.printf("Bus %s is vertrokken van halte %s in richting %d.%n",
 				busName, lijn.getHalte(halteNummer), lijn.getRichting(halteNummer)*richting);
 		naarVolgendeHalte();
@@ -76,7 +79,7 @@ public class Bus{
 		int i=0;
 		Bericht bericht = new Bericht(busName,bedrijf.name(),busID,nu);
 		if (bijHalte) {
-			ETA eta = new ETA(lijn.getHalte(halteNummer).name(),lijn.getRichting(halteNummer)*richting,0);
+			ETA eta = new ETA(halte.name(),lijn.getRichting(halteNummer)*richting,0);
 			bericht.ETAs.add(eta);
 		}
 		Positie eerstVolgende=lijn.getHalte(halteNummer+richting).getPositie();
@@ -93,7 +96,7 @@ public class Bus{
 
 	public void sendLastETA(int nu){
 		Bericht bericht = new Bericht(busName,bedrijf.name(),busID,nu);
-		String eindpunt = lijn.getHalte(halteNummer).name();
+		String eindpunt = halte.name();
 		ETA eta = new ETA(eindpunt,lijn.getRichting(halteNummer)*richting,0);
 		bericht.ETAs.add(eta);
 		bericht.eindpunt = eindpunt;
