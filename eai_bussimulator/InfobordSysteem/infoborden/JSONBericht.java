@@ -73,6 +73,7 @@ public class JSONBericht {
 				+ busID + ", bedrijf=" + bedrijf + ", eindpunt=" + eindpunt + "]";
 	}
 
+
 	public String getFormattedTimeFromCounter(int counter){
 		int uur = counter/3600;
 		int minuten = (counter-3600*uur)/60;
@@ -80,4 +81,5 @@ public class JSONBericht {
 		Tijd tijd=new Tijd(uur,minuten,seconden);
 		return tijd.toString();
 	}
+
 }

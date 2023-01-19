@@ -2,6 +2,10 @@ package tijdtools;
 
 import java.io.IOException;
 import com.thoughtworks.xstream.XStream;
+import org.codehaus.jackson.map.ObjectMapper;
+import tijdtools.HTTPFuncties;
+import tijdtools.Tijd;
+import tijdtools.Time;
 
 public class TijdFuncties {
 	private Time startTijd;
@@ -13,7 +17,7 @@ public class TijdFuncties {
 
 	public void initSimulatorTijden(int interval, int syncInterval){
 		simulatorTijd=new Tijd(0,0,0);
-		startTijd=getCentralTime();
+		startTijd= getCentralTime();
 		verschil=berekenVerschil(startTijd,simulatorTijd);
 		this.interval=interval;
 		this.syncCounter=syncInterval;
@@ -72,18 +76,18 @@ public class TijdFuncties {
 		verschil.increment(delay);
 	}
 
-	private Time getCentralTime()
+	public static Tijd getCentralTime()
 	{
 		try {
-			String result = HTTPFuncties.executeGet("xml");
-			XStream xstream = new XStream();
-			xstream.alias("Tijd", Tijd.class);
-			Time tijd=(Tijd)xstream.fromXML(result);
+			HTTPFuncties httpFuncties = new HTTPFuncties();
+			String result = httpFuncties.executeGet("json");
+			Tijd tijd = new ObjectMapper().readValue(result, Tijd.class);
 			return tijd;
-
 		} catch (IOException e) {
 			e.printStackTrace();
 			return new Tijd(0,0,0);
 		}
 	}
+
+
 }

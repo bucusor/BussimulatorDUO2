@@ -9,11 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.codehaus.jackson.map.ObjectMapper;
-import tijdtools.HTTPFuncties;
-import tijdtools.Tijd;
-
-import java.io.IOException;
+import tijdtools.TijdFuncties;
 
 public class Infobord extends Application{
 	private String titel = "Bushalte XX in richting YY";
@@ -37,7 +33,7 @@ public class Infobord extends Application{
 		if (berichten.hetBordMoetVerverst()) {
 			String[] infoTekstRegels = berichten.repaintInfoBordValues();
 //			Deze code hoort bij opdracht 3
-			String tijd = getCentralTime().toString();
+			String tijd = TijdFuncties.getCentralTime().toString();
 			tijdRegel.setText(tijd);
 			infoRegel1.setText(infoTekstRegels[0]);
 			infoRegel2.setText(infoTekstRegels[1]);
@@ -93,17 +89,5 @@ public class Infobord extends Application{
 		Thread brokerThread = new Thread(runnable);
 		brokerThread.setDaemon(daemon);
 		brokerThread.start();
-	}
-
-	public Tijd getCentralTime()
-	{
-		try {
-			String result = HTTPFuncties.executeGet("json");
-			Tijd tijd = new ObjectMapper().readValue(result, Tijd.class);
-			return tijd;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return new Tijd(0,0,0);
-		}
 	}
 }
