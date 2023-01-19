@@ -9,7 +9,11 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import tijdtools.InfobordTijdFuncties;
+import org.codehaus.jackson.map.ObjectMapper;
+import tijdtools.HTTPFuncties;
+import tijdtools.Tijd;
+
+import java.io.IOException;
 
 public class Infobord extends Application{
 	private String titel = "Bushalte XX in richting YY";
@@ -33,8 +37,7 @@ public class Infobord extends Application{
 		if (berichten.hetBordMoetVerverst()) {
 			String[] infoTekstRegels = berichten.repaintInfoBordValues();
 //			Deze code hoort bij opdracht 3
-			InfobordTijdFuncties tijdfuncties = new InfobordTijdFuncties();
-			String tijd = tijdfuncties.getCentralTime().toString();
+			String tijd = getCentralTime().toString();
 			tijdRegel.setText(tijd);
 			infoRegel1.setText(infoTekstRegels[0]);
 			infoRegel2.setText(infoTekstRegels[1]);
@@ -90,5 +93,26 @@ public class Infobord extends Application{
 		Thread brokerThread = new Thread(runnable);
 		brokerThread.setDaemon(daemon);
 		brokerThread.start();
+	}
+
+	public Tijd getCentralTime()
+	{
+		try {
+			HTTPFuncties httpFuncties = new HTTPFuncties();
+			String result = httpFuncties.executeGet("json");
+			Tijd tijd = new ObjectMapper().readValue(result, Tijd.class);
+			return tijd;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return new Tijd(0,0,0);
+		}
+	}
+
+	public String getFormattedTimeFromCounter(int counter){
+		int uur = counter/3600;
+		int minuten = (counter-3600*uur)/60;
+		int seconden = counter - 3600*uur - 60*minuten;
+		Tijd tijd=new Tijd(uur,minuten,seconden);
+		return tijd.toString();
 	}
 }
