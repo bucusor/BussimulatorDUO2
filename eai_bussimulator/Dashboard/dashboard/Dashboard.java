@@ -20,23 +20,22 @@ import java.io.InputStreamReader;
 import bussimulator.Runner;
 
 public class Dashboard extends Application {
-		
-    private void thread(Runnable runnable, boolean daemon) {
+
+	private void thread(Runnable runnable, boolean daemon) {
 		Thread brokerThread = new Thread(runnable);
 		brokerThread.setDaemon(daemon);
 		brokerThread.start();
 	}
-    
-    private void startBord(String halte, String richting) {
-		Infobord infobord = new Infobord(halte,richting);
+
+	private void startBord(String halte, String richting) {
 		Platform.runLater(new Runnable() {
-			public void run() {             
-				infobord.start(new Stage());
+			public void run() {
+				new Infobord(halte,richting).start(new Stage());
 			}
-		});	    	
-    }
+		});
+	}
 	private void startAlles() {
-		thread(new Runner(),false); 
+		thread(new Runner(),false);
 	}
 
 	@Override // Override the start method in the Application class
