@@ -1,10 +1,7 @@
-package dashboard;
+package tijdtools;
 
 import java.io.IOException;
 import com.thoughtworks.xstream.XStream;
-import tijdtools.HTTPFuncties;
-import tijdtools.Tijd;
-import tijdtools.Time;
 
 public class TijdFuncties {
 	private Time startTijd;
@@ -78,8 +75,7 @@ public class TijdFuncties {
 	private Time getCentralTime()
 	{
 		try {
-			HTTPFuncties httpFuncties = new HTTPFuncties();
-			String result = httpFuncties.executeGet("xml");
+			String result = HTTPFuncties.executeGet("xml");
 			XStream xstream = new XStream();
 			xstream.alias("Tijd", Tijd.class);
 			Time tijd=(Tijd)xstream.fromXML(result);
