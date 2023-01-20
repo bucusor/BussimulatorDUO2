@@ -12,7 +12,6 @@ public class Runner implements Runnable {
 	private static ArrayList<Bus> actieveBussen = new ArrayList<Bus>();
 	private static int interval=1000;
 	private static int syncInterval=5;
-	static BusFactory busFactory;
 
 	private static void addBus(int starttijd, Bus bus){
 		ArrayList<Bus> bussen = new ArrayList<Bus>();
@@ -41,7 +40,7 @@ public class Runner implements Runnable {
 				bus.sendLastETA(nu);
 				itr.remove();
 			}
-		}
+		}		
 	}
 
 	public static void sendETAs(int nu){
@@ -49,35 +48,74 @@ public class Runner implements Runnable {
 		while (itr.hasNext()) {
 			Bus bus = itr.next();
 			bus.sendETAs(nu);
-		}
+		}				
 	}
 
 	public static int initBussen(){
-		busFactory = new BusFactory();
-		createBus(1);
-		createBus(-1);
+		Bus bus1=new Bus(Lijnen.LIJN1, Bedrijven.ARRIVA, 1);
+		Bus bus2=new Bus(Lijnen.LIJN2, Bedrijven.ARRIVA, 1);
+		Bus bus3=new Bus(Lijnen.LIJN3, Bedrijven.ARRIVA, 1);
+		Bus bus4=new Bus(Lijnen.LIJN4, Bedrijven.ARRIVA, 1);
+		Bus bus5=new Bus(Lijnen.LIJN5, Bedrijven.FLIXBUS, 1);
+		Bus bus6=new Bus(Lijnen.LIJN6, Bedrijven.QBUZZ, 1);
+		Bus bus7=new Bus(Lijnen.LIJN7, Bedrijven.QBUZZ, 1);
+		Bus bus8=new Bus(Lijnen.LIJN1, Bedrijven.ARRIVA, 1);
+		Bus bus9=new Bus(Lijnen.LIJN4, Bedrijven.ARRIVA, 1);
+		Bus bus10=new Bus(Lijnen.LIJN5, Bedrijven.FLIXBUS, 1);
+		Bus bus11=new Bus(Lijnen.LIJN8, Bedrijven.QBUZZ, 1);
+		Bus bus12=new Bus(Lijnen.LIJN8, Bedrijven.QBUZZ, 1);
+		Bus bus13=new Bus(Lijnen.LIJN3, Bedrijven.ARRIVA, 1);
+		Bus bus14=new Bus(Lijnen.LIJN4, Bedrijven.ARRIVA, 1);
+		Bus bus15=new Bus(Lijnen.LIJN5, Bedrijven.FLIXBUS, 1);
+		addBus(3, bus1);
+		addBus(5, bus2);
+		addBus(4, bus3);
+		addBus(6, bus4);	
+		addBus(3, bus5);
+		addBus(5, bus6);
+		addBus(4, bus7); 
+		addBus(6, bus8);	
+		addBus(12, bus9); 
+		addBus(10, bus10);	
+		addBus(3, bus11);
+		addBus(5, bus12);
+		addBus(14, bus13);
+		addBus(16, bus14);	
+		addBus(13, bus15);
+		Bus bus21=new Bus(Lijnen.LIJN1, Bedrijven.ARRIVA, -1);
+		Bus bus22=new Bus(Lijnen.LIJN2, Bedrijven.ARRIVA, -1);
+		Bus bus23=new Bus(Lijnen.LIJN3, Bedrijven.ARRIVA, -1);
+		Bus bus24=new Bus(Lijnen.LIJN4, Bedrijven.ARRIVA, -1);
+		Bus bus25=new Bus(Lijnen.LIJN5, Bedrijven.FLIXBUS, -1);
+		Bus bus26=new Bus(Lijnen.LIJN6, Bedrijven.QBUZZ, -1);
+		Bus bus27=new Bus(Lijnen.LIJN7, Bedrijven.QBUZZ, -1);
+		Bus bus28=new Bus(Lijnen.LIJN1, Bedrijven.ARRIVA, -1);
+		Bus bus29=new Bus(Lijnen.LIJN4, Bedrijven.ARRIVA, -1);
+		Bus bus30=new Bus(Lijnen.LIJN5, Bedrijven.FLIXBUS, -1);
+		Bus bus31=new Bus(Lijnen.LIJN8, Bedrijven.QBUZZ, -1);
+		Bus bus32=new Bus(Lijnen.LIJN8, Bedrijven.QBUZZ, -1);
+		Bus bus33=new Bus(Lijnen.LIJN3, Bedrijven.ARRIVA, -1);
+		Bus bus34=new Bus(Lijnen.LIJN4, Bedrijven.ARRIVA, -1);
+		Bus bus35=new Bus(Lijnen.LIJN5, Bedrijven.FLIXBUS, -1);
+		addBus(3, bus21);
+		addBus(5, bus22);
+		addBus(4, bus23);
+		addBus(6, bus24);	
+		addBus(3, bus25);
+		addBus(5, bus26);
+		addBus(4, bus27); 
+		addBus(6, bus28);	
+		addBus(12, bus29); 
+		addBus(10, bus30);	
+		addBus(3, bus31);
+		addBus(5, bus32);
+		addBus(14, bus33);
+		addBus(16, bus34);	
+		addBus(13, bus35);
 		return Collections.min(busStart.keySet());
 	}
 
-	public static void createBus(int direction){
-		addBus(3, busFactory.createBus(Lijnen.LIJN1, Bedrijven.ARRIVA, direction));
-		addBus(5, busFactory.createBus(Lijnen.LIJN2, Bedrijven.ARRIVA, direction));
-		addBus(4, busFactory.createBus(Lijnen.LIJN3, Bedrijven.ARRIVA, direction));
-		addBus(6, busFactory.createBus(Lijnen.LIJN4, Bedrijven.ARRIVA, direction));
-		addBus(3, busFactory.createBus(Lijnen.LIJN5, Bedrijven.FLIXBUS, direction));
-		addBus(5, busFactory.createBus(Lijnen.LIJN6, Bedrijven.QBUZZ, direction));
-		addBus(4, busFactory.createBus(Lijnen.LIJN7, Bedrijven.QBUZZ, direction));
-		addBus(6, busFactory.createBus(Lijnen.LIJN1, Bedrijven.ARRIVA, direction));
-		addBus(12, busFactory.createBus(Lijnen.LIJN4, Bedrijven.ARRIVA, direction));
-		addBus(10, busFactory.createBus(Lijnen.LIJN5, Bedrijven.FLIXBUS, direction));
-		addBus(3, busFactory.createBus(Lijnen.LIJN8, Bedrijven.QBUZZ, direction));
-		addBus(5, busFactory.createBus(Lijnen.LIJN8, Bedrijven.QBUZZ, direction));
-		addBus(14, busFactory.createBus(Lijnen.LIJN3, Bedrijven.ARRIVA, direction));
-		addBus(16, busFactory.createBus(Lijnen.LIJN4, Bedrijven.ARRIVA, direction));
-		addBus(13, busFactory.createBus(Lijnen.LIJN5, Bedrijven.FLIXBUS, direction));
-	}
-
-	//	@Override
+//	@Override
 //	public void run() {
 //		int tijd=0;
 //		int volgende = initBussen();
@@ -99,28 +137,24 @@ public class Runner implements Runnable {
 //
 	@Override
 	public void run() {
+		int tijd=0;
 		int counter=0;
 		TijdFuncties tijdFuncties = new TijdFuncties();
 		tijdFuncties.initSimulatorTijden(interval,syncInterval);
 		int volgende = initBussen();
 		while ((volgende>=0) || !actieveBussen.isEmpty()) {
 			counter=tijdFuncties.getCounter();
+			tijd=tijdFuncties.getTijdCounter();
+			System.out.println("De tijd is:" + tijdFuncties.getSimulatorWeergaveTijd());
 			volgende = (counter==volgende) ? startBussen(counter) : volgende;
-			runWhile(tijdFuncties);
-
-		}
-	}
-
-	public void runWhile(TijdFuncties tijdFuncties){
-		int tijd=tijdFuncties.getTijdCounter();
-		System.out.println("De tijd is:" + tijdFuncties.getSimulatorWeergaveTijd());
-		moveBussen(tijd);
-		sendETAs(tijd);
-		try {
-			tijdFuncties.simulatorStep();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			moveBussen(tijd);
+			sendETAs(tijd);
+			try {
+				tijdFuncties.simulatorStep();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 }

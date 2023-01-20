@@ -1,7 +1,6 @@
 package infoborden;
 
 import tijdtools.InfobordTijdFuncties;
-import tijdtools.Tijd;
 
 public class JSONBericht {
 	private int tijd;
@@ -11,6 +10,19 @@ public class JSONBericht {
 	private String bedrijf;
 	private String eindpunt;
 
+	public JSONBericht(int tijd, int aankomsttijd, String lijnNaam, String busID, String bedrijf, String eindpunt) {
+		super();
+		this.tijd = tijd;
+		this.aankomsttijd = aankomsttijd;
+		this.lijnNaam = lijnNaam;
+		this.busID = busID;
+		this.bedrijf = bedrijf;
+		this.eindpunt = eindpunt;
+	}
+
+	public JSONBericht(){
+
+	}
 
 	public int getTijd() {
 		return tijd;
@@ -62,8 +74,9 @@ public class JSONBericht {
 
 	public String getInfoRegel() {
 //		Code voor opdracht 3:
-		String tijd = getFormattedTimeFromCounter(aankomsttijd);
-//		String tijd = "" + aankomsttijd;
+		InfobordTijdFuncties tijdFuncties = new InfobordTijdFuncties();
+		String tijd = tijdFuncties.getFormattedTimeFromCounter(aankomsttijd);
+		//String tijd = "" + aankomsttijd;
 		String regel = String.format("%8s - %5s - %12s", this.lijnNaam, this.eindpunt, tijd);
 		return regel;
 	}
@@ -73,13 +86,4 @@ public class JSONBericht {
 		return "JSONBericht [tijd=" + tijd + ", aankomsttijd=" + aankomsttijd + ", lijnNaam=" + lijnNaam + ", busID="
 				+ busID + ", bedrijf=" + bedrijf + ", eindpunt=" + eindpunt + "]";
 	}
-
-
-	public String getFormattedTimeFromCounter(int counter){
-		int uur = counter/3600;
-		int minuten = (counter-3600*uur)/60;
-		int seconden = counter - 3600*uur - 60*minuten;
-		return String.format("%02d:%02d:%02d", uur,minuten,seconden);
-	}
-
 }
