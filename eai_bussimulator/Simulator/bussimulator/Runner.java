@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import tijdtools.ITijdFuncties;
 import tijdtools.TijdFuncties;
 
 public class Runner implements Runnable {
@@ -100,7 +101,7 @@ public class Runner implements Runnable {
 	@Override
 	public void run() {
 		int counter=0;
-		TijdFuncties tijdFuncties = new TijdFuncties();
+		ITijdFuncties tijdFuncties = new TijdFuncties();
 		tijdFuncties.initSimulatorTijden(interval,syncInterval);
 		int volgende = initBussen();
 		while ((volgende>=0) || !actieveBussen.isEmpty()) {
@@ -111,7 +112,7 @@ public class Runner implements Runnable {
 		}
 	}
 
-	public void runWhile(TijdFuncties tijdFuncties){
+	public void runWhile(ITijdFuncties tijdFuncties){
 		int tijd=tijdFuncties.getTijdCounter();
 		System.out.println("De tijd is:" + tijdFuncties.getSimulatorWeergaveTijd());
 		moveBussen(tijd);
