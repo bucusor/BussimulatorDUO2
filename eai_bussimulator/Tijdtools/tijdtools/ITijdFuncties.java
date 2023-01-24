@@ -14,6 +14,16 @@ public interface ITijdFuncties {
     int calculateCounter(Time tijd);
     Time berekenVerschil(Time reverentieTijd, Time werkTijd);
     void synchroniseTijd();
-
+    static Tijd getCentralTime()
+    {
+        try {
+            HTTPFuncties httpFuncties = new HTTPFuncties();
+            String result = httpFuncties.executeGet("json");
+            return new ObjectMapper().readValue(result, Tijd.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new Tijd(0,0,0);
+        }
+    }
 
 }

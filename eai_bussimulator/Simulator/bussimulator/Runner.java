@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import tijdtools.ITijdFuncties;
 import tijdtools.TijdFuncties;
 
 public class Runner implements Runnable {
@@ -100,29 +101,27 @@ public class Runner implements Runnable {
 	@Override
 	public void run() {
 		int counter=0;
-		TijdFuncties.initSimulatorTijden(interval,syncInterval);
+		TijdFuncties tijdFuncties = new TijdFuncties();
+		tijdFuncties.initSimulatorTijden(interval,syncInterval);
 		int volgende = initBussen();
 		while ((volgende>=0) || !actieveBussen.isEmpty()) {
-			counter=TijdFuncties.getCounter();
+			counter=tijdFuncties.getCounter();
 			volgende = (counter==volgende) ? startBussen(counter) : volgende;
-			runWhile();
+			runWhile(tijdFuncties);
 
 		}
 	}
 
-	public void runWhile(){
-		int tijd=TijdFuncties.getTijdCounter();
-		System.out.println("De tijd is:" + TijdFuncties.getSimulatorWeergaveTijd());
+	public void runWhile(TijdFuncties tijdFuncties){
+		int tijd=tijdFuncties.getTijdCounter();
+		System.out.println("De tijd is:" + tijdFuncties.getSimulatorWeergaveTijd());
 		moveBussen(tijd);
 		sendETAs(tijd);
 		try {
-			TijdFuncties.simulatorStep();
+			tijdFuncties.simulatorStep();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-
-
-
 }
