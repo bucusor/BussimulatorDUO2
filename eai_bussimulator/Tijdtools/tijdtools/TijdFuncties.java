@@ -1,9 +1,8 @@
 package tijdtools;
 
-import bussimulator.ITijdFuncties;
-import org.codehaus.jackson.map.ObjectMapper;
-
 import java.io.IOException;
+
+import org.codehaus.jackson.map.ObjectMapper;
 
 public class TijdFuncties implements ITijdFuncties {
 	private Time startTijd;
@@ -13,10 +12,9 @@ public class TijdFuncties implements ITijdFuncties {
 	private int syncInterval;
 	private int syncCounter;
 
-	@Override
 	public void initSimulatorTijden(int interval, int syncInterval){
 		simulatorTijd=new Tijd(0,0,0);
-		startTijd= getCentralTime();
+		startTijd= ITijdFuncties.getCentralTime();
 		verschil=berekenVerschil(startTijd,simulatorTijd);
 		this.interval=interval;
 		this.syncCounter=syncInterval;
@@ -67,24 +65,12 @@ public class TijdFuncties implements ITijdFuncties {
 	}
 
 	public void synchroniseTijd(){
-		Time huidigeTijd = getCentralTime();
+		Time huidigeTijd = ITijdFuncties.getCentralTime();
 		System.out.println("De werkelijke tijd is nu: "+ huidigeTijd.toString());
 		Time verwachtteSimulatorTijd = simulatorTijd.copyTijd();
 		verwachtteSimulatorTijd.increment(verschil);
 		Time delay = berekenVerschil(huidigeTijd, verwachtteSimulatorTijd);
 		verschil.increment(delay);
-	}
-
-	public static Tijd getCentralTime()
-	{
-		try {
-			HTTPFuncties httpFuncties = new HTTPFuncties();
-			String result = httpFuncties.executeGet("json");
-			return new ObjectMapper().readValue(result, Tijd.class);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return new Tijd(0,0,0);
-		}
 	}
 
 
