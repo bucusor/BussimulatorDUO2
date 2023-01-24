@@ -101,7 +101,7 @@ public class Runner implements Runnable {
 	@Override
 	public void run() {
 		int counter=0;
-		ITijdFuncties tijdFuncties = new TijdFuncties();
+		TijdFuncties tijdFuncties = new TijdFuncties();
 		tijdFuncties.initSimulatorTijden(interval,syncInterval);
 		int volgende = initBussen();
 		while ((volgende>=0) || !actieveBussen.isEmpty()) {
@@ -112,7 +112,7 @@ public class Runner implements Runnable {
 		}
 	}
 
-	public void runWhile(ITijdFuncties tijdFuncties){
+	public void runWhile(TijdFuncties tijdFuncties){
 		int tijd=tijdFuncties.getTijdCounter();
 		System.out.println("De tijd is:" + tijdFuncties.getSimulatorWeergaveTijd());
 		moveBussen(tijd);
