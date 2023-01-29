@@ -99,9 +99,7 @@ public class Simulator {
 //	Om de tijdsynchronisatie te gebruiken moet de onderstaande run() gebruikt worden
 //
     public void startSimulator() {
-        int counter = 0;
-        int tijd = 0;
-        ITijdFuncties tijdFuncties = new TijdFuncties();
+        ITijdFuncties tijdFuncties = StartTijd.starter();
         tijdFuncties.initSimulatorTijden(interval, syncInterval);
         int volgende = initBussen();
         while ((volgende >= 0) || !actieveBussen.isEmpty()) {
@@ -111,12 +109,8 @@ public class Simulator {
             volgende = (counter == volgende) ? startBussen(counter) : volgende;
             moveBussen(tijd);
             sendETAs(tijd);
-            try {
-                tijdFuncties.simulatorStep();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-
-            }
+            try { tijdFuncties.simulatorStep();
+            } catch (InterruptedException e) { e.printStackTrace(); }
         }
     }
 }
