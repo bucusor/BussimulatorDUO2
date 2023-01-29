@@ -4,7 +4,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.IOException;
 
-public class TijdFuncties {
+public class TijdFuncties implements ITijdFuncties{
 	private static Time startTijd;
 	private static Time simulatorTijd;
 	private static Time verschil;
@@ -13,7 +13,7 @@ public class TijdFuncties {
 	private static int syncCounter;
 
 
-	public static void initSimulatorTijden(int interval, int syncInterval){
+	public void initSimulatorTijden(int interval, int syncInterval){
 		simulatorTijd=new Tijd(0,0,0);
 		startTijd= getCentralTime();
 		verschil=berekenVerschil(startTijd,simulatorTijd);
@@ -22,21 +22,21 @@ public class TijdFuncties {
 		TijdFuncties.syncInterval =syncInterval;
 	}
 
-	public static String getSimulatorWeergaveTijd(){
+	public String getSimulatorWeergaveTijd(){
 		Time simulatorWeergaveTijd= simulatorTijd.copyTijd();
 		simulatorWeergaveTijd.increment(verschil);
 		return simulatorWeergaveTijd.toString();
 	}
 
-	public static int getCounter(){
+	public int getCounter(){
 		return calculateCounter(simulatorTijd);
 	}
 
-	public static int getTijdCounter(){
+	public int getTijdCounter(){
 		return calculateCounter(simulatorTijd)+calculateCounter(verschil);
 	}
 
-	public static void simulatorStep() throws InterruptedException{
+	public void simulatorStep() throws InterruptedException{
 		Thread.sleep(interval);
 		simulatorTijd.increment(new Tijd(0,0,1));
 		syncCounter--;

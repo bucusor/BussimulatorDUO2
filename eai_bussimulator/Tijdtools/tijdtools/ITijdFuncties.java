@@ -11,9 +11,6 @@ public interface ITijdFuncties {
     int getCounter();
     int getTijdCounter();
     void simulatorStep() throws InterruptedException;
-    int calculateCounter(Time tijd);
-    Time berekenVerschil(Time reverentieTijd, Time werkTijd);
-    void synchroniseTijd();
 
 
 }

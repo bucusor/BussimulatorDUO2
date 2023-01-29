@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import tijdtools.ITijdFuncties;
 import tijdtools.TijdFuncties;
 
 public class Runner implements Runnable {
@@ -99,30 +100,25 @@ public class Runner implements Runnable {
 //
 	@Override
 	public void run() {
-		int counter=0;
-		TijdFuncties.initSimulatorTijden(interval,syncInterval);
+		int counter = 0;
+		int tijd = 0;
+		ITijdFuncties tijdFuncties = new TijdFuncties();
+		tijdFuncties.initSimulatorTijden(interval, syncInterval);
 		int volgende = initBussen();
-		while ((volgende>=0) || !actieveBussen.isEmpty()) {
-			counter=TijdFuncties.getCounter();
-			volgende = (counter==volgende) ? startBussen(counter) : volgende;
-			runWhile();
+		while ((volgende >= 0) || !actieveBussen.isEmpty()) {
+			counter = tijdFuncties.getCounter();
+			tijd = tijdFuncties.getTijdCounter();
+			System.out.println("De tijd is:" + tijdFuncties.getSimulatorWeergaveTijd());
+			volgende = (counter == volgende) ? startBussen(counter) : volgende;
+			moveBussen(tijd);
+			sendETAs(tijd);
+			try {
+				tijdFuncties.simulatorStep();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 
+			}
 		}
 	}
-
-	public void runWhile(){
-		int tijd=TijdFuncties.getTijdCounter();
-		System.out.println("De tijd is:" + TijdFuncties.getSimulatorWeergaveTijd());
-		moveBussen(tijd);
-		sendETAs(tijd);
-		try {
-			TijdFuncties.simulatorStep();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-
 
 }
