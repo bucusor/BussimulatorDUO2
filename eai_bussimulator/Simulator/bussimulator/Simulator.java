@@ -1,6 +1,7 @@
 package bussimulator;
 
 import tijdtools.ITijdFuncties;
+import tijdtools.StartTijd;
 import tijdtools.TijdFuncties;
 
 import java.util.ArrayList;
@@ -101,7 +102,7 @@ public class Simulator {
     public void startSimulator() {
         int counter = 0;
         int tijd = 0;
-        ITijdFuncties tijdFuncties = new TijdFuncties();
+        ITijdFuncties tijdFuncties = StartTijd.starter();
         tijdFuncties.initSimulatorTijden(interval, syncInterval);
         int volgende = initBussen();
         while ((volgende >= 0) || !actieveBussen.isEmpty()) {
